@@ -65,24 +65,26 @@ namespace LWM.DeepStorage
             return cutoffBuildingStorageGizmos >= 0; // 0 means we transpile away, higher number means we need to check
         }
 
-        static MethodBase TargetMethod() //The target method is found using the custom logic defined here
+        static MethodBase TargetMethod()
         {
-            // So IEnumerables suck.
-            // There is a hidden IL class inside BuildingStorage that GetGizmos uses for the IEnumerable
-            //   In the IL it's listed as <GetGizmos>d__43, and the method we want to patch is from that
-            //   class.  It's called MoveNext.  If we are lucky, we can do it ALL in one go.
-            var method = typeof(RimWorld.Building_Storage).GetNestedType("<GetGizmos>d__52", AccessTools.all)
-                .GetMethod("MoveNext", AccessTools.all);
-            if (method == null) Log.Error("LWM.DeepStorage: Transpiler could not find \"<GetGizmos>d__52\" :( ");
+            var nested = typeof(Building_Storage).GetNestedTypes(AccessTools.all)
+                .FirstOrDefault(t => typeof(IEnumerator<Gizmo>).IsAssignableFrom(t));
+
+            if (nested == null)
+            {
+                Log.Error("LWM.DeepStorage: Failed to find nested IEnumerator<Gizmo> for GetGizmos.");
+                return null;
+            }
+
+            var method = nested.GetMethod("MoveNext", AccessTools.all);
+            if (method == null)
+            {
+                Log.Error("LWM.DeepStorage: Failed to find MoveNext in nested type.");
+            }
+
             return method;
-            /* Another way to go about it, if we ever need it:
-             *   (above HAS failed before (perhaps in earlier versions of Harmony?)
-            var predicateClass = typeof(RimWorld.Building_Storage).GetNestedTypes(HarmonyLib.AccessTools.all)
-               .FirstOrDefault(t => t.FullName.Contains("<GetGizmos>d__43"));
-            var m = predicateClass.GetMethods(AccessTools.all)
-                                 .FirstOrDefault(t => t.Name.Contains("MoveNext"));
-              */
         }
+
 
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructionsEnumerable)
         {

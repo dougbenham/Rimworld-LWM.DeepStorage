@@ -3,36 +3,39 @@ using Verse;
 using RimWorld;
 using HarmonyLib;
 
-namespace LWM.DeepStorage {
+namespace LWM.DeepStorage
+{
     [StaticConstructorOnStartup]
-    public static class ModInit {
-        static ModInit() {
-            Log.Message("LWM Update: stable(ish) 1.5.0.4");
-            // Thanks to Static Constructor On Startup, all defs should be loaded now
+    public static class ModInit
+    {
+        static ModInit()
+        {
+            Log.Message("LWM.DeepStorage: 🐾 Init starting for RimWorld 1.5+ build!");
+
             RemoveAnyMultipleCompProps();
+            Log.Message("LWM.DeepStorage: Finished removing multiple comp props.");
+
             LWM.DeepStorage.Settings.DefsLoaded();
-            if (ModLister.GetActiveModWithIdentifier("rwmt.Multiplayer") != null) Settings.multiplayerIsActive = true;
-            // Can use this when pushing out changes to Steam, to make sure user-tester has
-            //     the correct version
+            Log.Message("LWM.DeepStorage: Settings defs loaded.");
+
+            if (ModLister.GetActiveModWithIdentifier("rwmt.Multiplayer") != null)
+            {
+                Settings.multiplayerIsActive = true;
+                Log.Message("LWM.DeepStorage: Multiplayer detected!");
+            }
+            else
+            {
+                Log.Message("LWM.DeepStorage: Multiplayer not detected.");
+            }
+
             var harmony = new Harmony("net.littlewhitemouse.LWM.DeepStorage");
             harmony.PatchAll();
-
-            // patch things individually:
-//            LWM.DeepStorage.Patch_IsSaveCompressible.Postfix();
-//            harmony.Patch(AccessTools.Method(typeof(CompressibilityDeciderUtility), "IsSaveCompressible"),
-//                null, SymbolExtensions.GetMethodInfo(()=> LWM.DeepStorage.Patch_IsSaveCompressible.))
+            Log.Message("LWM.DeepStorage: ✅ Harmony patches applied.");
         }
-
 
         public static void RemoveAnyMultipleCompProps()
         {
-            // For each def, make sure that only the last DS.Properties is
-            // used.  (this can happen if a modder makes another DSU based
-            // off of one of the base ones; see Pallet_Covered). Call this
-            // after all defs are loaded
-            // Note: this design choice was probably stupid, but it's done
-            //   now, for better or worse. Better to be safe than sorry, I
-            //   guess? I do a lot of crazy stuff.
+            int processed = 0;
             foreach (var d in DefDatabase<ThingDef>.AllDefs)
             {
                 if (typeof(Building_Storage).IsAssignableFrom(d.thingClass))
@@ -42,8 +45,6 @@ namespace LWM.DeepStorage {
                     {
                         if (cmps[i] is LWM.DeepStorage.Properties && i > 0)
                         {
-                            // remove any earlier instances
-                            // last one in should count:
                             for (i--; i >= 0; i--)
                             {
                                 if (cmps[i] is LWM.DeepStorage.Properties)
@@ -52,13 +53,10 @@ namespace LWM.DeepStorage {
                             break;
                         }
                     }
+                    processed++;
                 }
-                //continue to next def
             }
-        } //end RemoveAnyMultipleCompProps
-
-
+            Log.Message($"LWM.DeepStorage: Checked {processed} Building_Storage ThingDefs for duplicate comp props.");
+        }
     }
-
-
 }
