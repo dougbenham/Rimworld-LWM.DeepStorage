@@ -2,6 +2,7 @@
 using Verse;
 using RimWorld;
 using HarmonyLib;
+using System.Linq;
 
 namespace LWM.DeepStorage
 {
@@ -10,7 +11,14 @@ namespace LWM.DeepStorage
     {
         static ModInit()
         {
-            Log.Message("LWM.DeepStorage: 🐾 Init starting for RimWorld 1.5+ build!");
+            bool rimFridgeActive = ModsConfig.ActiveModsInLoadOrder
+                .Any(m => m.PackageId == "rimfridge.kv.rw");
+
+            if (rimFridgeActive)
+            {
+                Log.Warning("LWM.DeepStorage: RimFridge found in active mods. If an error occurs, make sure to enable `Ugly stack appearance` in RimFridge options.");
+            }
+                Log.Message("LWM.DeepStorage: 🐾 Init starting for RimWorld 1.5+ build!");
 
             RemoveAnyMultipleCompProps();
             Log.Message("LWM.DeepStorage: Finished removing multiple comp props.");
@@ -31,6 +39,16 @@ namespace LWM.DeepStorage
             var harmony = new Harmony("net.littlewhitemouse.LWM.DeepStorage");
             harmony.PatchAll();
             Log.Message("LWM.DeepStorage: ✅ Harmony patches applied.");
+
+            // Fix missing fixedStorageSettings for shelves, just in case
+            foreach (var def in DefDatabase<ThingDef>.AllDefs)
+            {
+                if ((def.defName == "LWM_BigShelf" || def.defName == "LWM_VeryBigShelf")
+                    && def.building != null && def.building.fixedStorageSettings == null)
+                {
+                    def.building.fixedStorageSettings = new StorageSettings(null);
+                }
+            }
         }
 
         public static void RemoveAnyMultipleCompProps()
