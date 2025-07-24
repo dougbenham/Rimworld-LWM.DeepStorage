@@ -238,6 +238,22 @@ This template demonstrates that whitespace is obeyed in the description.\n\nSo a
     <size>(2,1)</size>
     <defaultPlacingRot>South</defaultPlacingRot>
     <building>
+	   <fixedStorageSettings>
+        <filter>
+          <categories>
+            <li>Foods</li>
+            <li>Manufactured</li>
+            <li>ResourcesRaw</li>
+            <li>Items</li>
+            <li>Weapons</li>
+            <li>Apparel</li>
+            <li>BodyParts</li>
+			<li>Buildings</li>
+			<li>Corpses</li>
+			<li>Chunks</li>
+          </categories>
+        </filter>
+      </fixedStorageSettings>
       <preventDeteriorationOnTop>true</preventDeteriorationOnTop>
       <ignoreStoredThingsBeauty>true</ignoreStoredThingsBeauty>
       <defaultStorageSettings>
@@ -288,6 +304,22 @@ This template demonstrates that whitespace is obeyed in the description.\n\nSo a
     <size>(2,1)</size>
     <defaultPlacingRot>South</defaultPlacingRot>
     <building>
+	   <fixedStorageSettings>
+        <filter>
+          <categories>
+            <li>Foods</li>
+            <li>Manufactured</li>
+            <li>ResourcesRaw</li>
+            <li>Items</li>
+            <li>Weapons</li>
+            <li>Apparel</li>
+            <li>BodyParts</li>
+			<li>Buildings</li>
+			<li>Corpses</li>
+			<li>Chunks</li>
+          </categories>
+        </filter>
+      </fixedStorageSettings>
       <preventDeteriorationOnTop>true</preventDeteriorationOnTop>
       <ignoreStoredThingsBeauty>true</ignoreStoredThingsBeauty>
       <defaultStorageSettings>

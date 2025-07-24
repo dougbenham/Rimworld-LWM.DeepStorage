@@ -39,16 +39,6 @@ namespace LWM.DeepStorage
             var harmony = new Harmony("net.littlewhitemouse.LWM.DeepStorage");
             harmony.PatchAll();
             Log.Message("LWM.DeepStorage: ✅ Harmony patches applied.");
-
-            // Fix missing fixedStorageSettings for shelves, just in case
-            foreach (var def in DefDatabase<ThingDef>.AllDefs)
-            {
-                if ((def.defName == "LWM_BigShelf" || def.defName == "LWM_VeryBigShelf")
-                    && def.building != null && def.building.fixedStorageSettings == null)
-                {
-                    def.building.fixedStorageSettings = new StorageSettings(null);
-                }
-            }
         }
 
         public static void RemoveAnyMultipleCompProps()
