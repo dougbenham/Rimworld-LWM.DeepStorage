@@ -16,7 +16,7 @@ namespace LWM.DeepStorage
 
             if (rimFridgeActive)
             {
-                Log.Warning("LWM.DeepStorage: RimFridge found in active mods. If an error occurs, make sure to enable `Ugly stack appearance` in RimFridge options.");
+                Log.Warning("LWM.DeepStorage: RimFridge found in active mods. If an error occurs, make sure to enable `Ugly stack appearance` in RimFridge options and restart the game.");
             }
                 Log.Message("LWM.DeepStorage: 🐾 Init starting for RimWorld 1.5+ build!");
 

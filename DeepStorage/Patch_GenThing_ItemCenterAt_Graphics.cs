@@ -2,6 +2,7 @@
 using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 using UnityEngine;
 using Verse;
@@ -50,7 +51,7 @@ namespace LWM.DeepStorage
                      * IL_00ae: ldc.i4.1
                      * IL_00af: bgt.s IL_00cf
                      */
-                    // Will replacae with: if (true)
+                    // Will replace with: if (true)
                     if (list[i].opcode == OpCodes.Ldloc_2 &&   // numberTotalItems
                         list[i + 1].opcode == OpCodes.Ldc_I4_1 &&  // 1
                         list[i + 2].opcode == OpCodes.Bgt_S)       // if (num > 1) jump to fancy logic we don't want
@@ -72,9 +73,15 @@ namespace LWM.DeepStorage
                 Log.Warning("LWM.DeepStorage: Transpiler failed to break jump to fancy stacking graphics");
                 yield break; // Should never reach this, but if we do....???
             }
+            var displayClassType = typeof(GenThing).GetNestedTypes(BindingFlags.NonPublic)
+                .FirstOrDefault(t => t.Name.Contains("DisplayClass2_0"));
+            FieldInfo itemsWithLowerIDField = displayClassType?.GetField("itemsWithLowerID");
+            if (itemsWithLowerIDField == null)
+            {
+                Log.Error("LWM.DeepStorage: Could not find closure field 'itemsWithLowerID' for RimWorld.GenThing.ItemCenterAt transpiler! Patch will be incomplete.");
+            }
+
             foreach (var instruction in instructions)
-
-
             {
                 if (instruction.opcode == OpCodes.Ldc_R4 // from the IL code
                     && instruction.OperandIs(.11f))
@@ -87,7 +94,8 @@ namespace LWM.DeepStorage
                     else
                     {
                         yield return new CodeInstruction(instruction.opcode, .22f); // .22f
-                        yield return new CodeInstruction(OpCodes.Ldloc_1); // .22f, totalNumberItemsHere
+                        yield return new CodeInstruction(OpCodes.Ldloc_0);
+                        yield return new CodeInstruction(OpCodes.Ldfld, itemsWithLowerIDField);
                         yield return new CodeInstruction(OpCodes.Ldc_I4_1);
                         yield return new CodeInstruction(OpCodes.Sub); // .22f, (totalNumItemsHere - 1)
                         // Don't know if this is actually necessary, but seems like should be?
@@ -107,7 +115,8 @@ namespace LWM.DeepStorage
                     else
                     {
                         yield return new CodeInstruction(instruction.opcode, .48f); // .48f
-                        yield return new CodeInstruction(OpCodes.Ldloc_1); // .48f, totalNumberItemsHere
+                        yield return new CodeInstruction(OpCodes.Ldloc_0);
+                        yield return new CodeInstruction(OpCodes.Ldfld, itemsWithLowerIDField);
                         yield return new CodeInstruction(OpCodes.Ldc_I4_1);
                         yield return new CodeInstruction(OpCodes.Sub); // .48f, (totalNumItemsHere - 1)
                         // Still don't know if this is actually necessary, but still seems like should be?
