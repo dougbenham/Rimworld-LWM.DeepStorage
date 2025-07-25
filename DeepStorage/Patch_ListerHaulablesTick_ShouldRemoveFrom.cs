@@ -40,6 +40,13 @@ namespace LWM.DeepStorage
      // todo1.4 - we may want to revisit if settings change mid-game?
     //[HarmonyPatch(typeof(RimWorld.ListerHaulables), "ListerHaulablesTick")]
     static class Patch_ListerHaulablesTick {
+        static bool Prefix()
+        {
+            if (!Settings.listerHaulablesPerformanceBoost)
+                return true; // Run as normal (no optimization)
+                             // huge performance boost with negligible side effects
+            return Find.TickManager.TicksGame % 250 == 0;
+        }
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
             List<CodeInstruction> code=instructions.ToList();
             var check=typeof(ListerHaulables).GetMethod("Check", BindingFlags.NonPublic|BindingFlags.Instance);
