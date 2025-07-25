@@ -34,6 +34,7 @@ namespace LWM.DeepStorage
         //   (RimFactory? I think?)
         public static bool checkOverCapacity = true;
         public static bool useBoringOldStackingGraphic = false;
+        public static bool listerHaulablesPerformanceBoost = false;
 
         public static bool allowPerDSUSettings = false;
         public static DefChangeTracker defTracker = new DefChangeTracker();
@@ -420,6 +421,10 @@ namespace LWM.DeepStorage
                 l.CheckboxLabeled("LWMDSperDSUturnOn".Translate(), ref allowPerDSUSettings,
                                   "LWMDSperDSUturnOnDesc".Translate());
             }
+            //--------------------------------------------------------------------------------------------
+            l.GapLine();   /////// Experimental ///////
+            l.CheckboxLabeled("LWMDSListerHaulablesTick".Translate(), ref listerHaulablesPerformanceBoost,
+                              "LWMDSListerHaulablesTickDesc".Translate());
             //--------------------------------------------------------------------------------------------
             l.GapLine(); // End. Finis. Looks pretty having a line at the end.
             totalContentHeight = l.CurHeight + 10f;
@@ -818,6 +823,8 @@ namespace LWM.DeepStorage
             if (allowPerDSUSettings && Verse.StaticConstructorOnStartupUtility.coreStaticAssetsLoaded) {
                 Dialog_DS_Settings.ExposeDSUSettings(AllDeepStorageUnits);
             }
+            // Experimental:
+            Scribe_Values.Look(ref listerHaulablesPerformanceBoost, "listerHaulablesPerformanceBoost", false);
         } // end ExposeData()
 
 
