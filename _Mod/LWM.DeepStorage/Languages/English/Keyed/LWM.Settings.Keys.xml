@@ -81,6 +81,6 @@
   <LWMDS_CurrentMaxNumStacksTotals>Currently: {0} stacks/cell ({1} total)</LWMDS_CurrentMaxNumStacksTotals>
   <LWMDS_DefaultMaxNumStacksTotals>Default: {0} stacks/cell ({1} total)</LWMDS_DefaultMaxNumStacksTotals>
   <!-- Other Experimental Settings  -->
-  <LWMDSListerHaulablesTick>Enable ListerHaulables performance optimization (experimental)</LWMDSListerHaulablesTick>
+  <LWMDSListerHaulablesTick>Enable ListerHaulables performance optimization? (experimental)</LWMDSListerHaulablesTick>
   <LWMDSListerHaulablesTickDesc>Changes ListerHaulablesTick to run every 250 ticks instead of every tick for a large performance boost. Could cause an error if there's an uncaught change within those 250 ticks.</LWMDSListerHaulablesTickDesc>
 </LanguageData>
