@@ -80,7 +80,4 @@
   <LWMDS_DefaultRemoveNameDesc>This storage unit is part of a named group. If there is only one unit in the group, you can REMOVE the name here - it will no longer show up as a destination for bills. Otherwise, you may set the group to a DEFAULT name.</LWMDS_DefaultRemoveNameDesc>
   <LWMDS_CurrentMaxNumStacksTotals>Currently: {0} stacks/cell ({1} total)</LWMDS_CurrentMaxNumStacksTotals>
   <LWMDS_DefaultMaxNumStacksTotals>Default: {0} stacks/cell ({1} total)</LWMDS_DefaultMaxNumStacksTotals>
-  <!-- Other Experimental Settings  -->
-  <LWMDSListerHaulablesTick>Enable ListerHaulables performance optimization (experimental)</LWMDSListerHaulablesTick>
-  <LWMDSListerHaulablesTickDesc>Changes ListerHaulablesTick to run every 250 ticks instead of every tick for a large performance boost. Could cause an error if there's an uncaught change within those 250 ticks.</LWMDSListerHaulablesTickDesc>
 </LanguageData>
