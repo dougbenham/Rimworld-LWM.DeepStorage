@@ -13,15 +13,28 @@ namespace LWM.DeepStorage
         static void Prefix(Frame __instance)
         {
             compDS = null;
-            if (__instance == null) Log.Error("DeepStorage: null Frame instance in CompleteConstruction");
-            if (__instance.Map == null) Log.Error("DeepStorage: null Map in Frame " + __instance);
+            if (__instance == null)
+            {
+                Log.Error("DeepStorage: null Frame instance in CompleteConstruction");
+                return;
+            }
+            if (__instance.Map == null)
+            {
+                // Log.Error("DeepStorage: null Map in Frame " + __instance);
+                return;
+            }
 
-            __instance.Map.GetComponent<MapComponentDS>().settingsForBlueprintsAndFrames.Remove(__instance, out compDS);
+            // Only access Map if it's not null (fixed for Replace Stuff)
+            var mc = __instance.Map.GetComponent<MapComponentDS>();
+            if (mc != null)
+            {
+                mc.settingsForBlueprintsAndFrames.Remove(__instance, out compDS);
+            }
         }
 
         static void Postfix(Frame __instance)
         {
-            if (compDS == null || __instance.Map == null)
+            if (compDS == null || __instance?.Map == null)
                 return;
 
             foreach (var thing in __instance.Position.GetThingList(__instance.Map))
