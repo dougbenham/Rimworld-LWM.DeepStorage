@@ -34,7 +34,7 @@ namespace LWM.DeepStorage
         //   (RimFactory? I think?)
         public static bool checkOverCapacity = true;
         public static bool useBoringOldStackingGraphic = false;
-        public static bool listerHaulablesPerformanceBoost = false;
+        public static bool listerHaulablesPerformanceBoost = true;
 
         public static bool allowPerDSUSettings = false;
         public static DefChangeTracker defTracker = new DefChangeTracker();

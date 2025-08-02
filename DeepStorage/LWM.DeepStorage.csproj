@@ -44,6 +44,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Patch_Reservation_Reservation_CompDeepStorage.cs" />
     <Compile Include="Patch_TantrumMentalStateUtility_CanSmash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mod.cs" />
